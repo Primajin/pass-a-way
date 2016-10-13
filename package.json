@@ -1,0 +1,22 @@
+{
+  "name": "pass-a-way",
+  "version": "0.0.1",
+  "description": "A way to pass away a password before you pass away.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Primajin/pass-a-way.git"
+  },
+  "author": "Jannis Hell",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Primajin/pass-a-way/issues"
+  },
+  "homepage": "https://github.com/Primajin/pass-a-way#readme",
+  "dependencies": {
+    "milligram": "^1.1.0"
+  }
+}
