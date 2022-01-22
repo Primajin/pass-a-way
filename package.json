@@ -6,11 +6,13 @@
   "type": "module",
   "scripts": {
     "build": "node ./scripts/build.js --minify",
+    "coverage": "c8 --reporter=lcov xo && codecov",
     "dev": "node ./scripts/build.js --watch --platform=browser --sourcemap",
+    "lint": "xo",
+    "lint:fix": "xo --fix",
+    "lint:watch": "npx nodemon -x npm run lint:fix --ext js,ts,json",
     "node": "npx nodemon server.js --ext js",
-    "test": "xo",
-    "xo": "xo --fix",
-    "xo:watch": "npx nodemon -x npm run xo --ext js,ts,json"
+    "test": "xo"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
   },
   "homepage": "https://github.com/Primajin/pass-a-way#readme",
   "devDependencies": {
+    "c8": "^7.11.0",
     "esbuild": "^0.14.13",
     "glob": "^7.2.0",
     "typescript": "^4.5.5",
