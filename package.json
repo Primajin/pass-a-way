@@ -7,9 +7,10 @@
   "scripts": {
     "build": "node ./scripts/build.js --minify",
     "dev": "node ./scripts/build.js --watch --platform=browser --sourcemap",
+    "node": "npx nodemon server.js --ext js",
     "test": "xo",
     "xo": "xo --fix",
-    "xo:watch": "npx nodemon -x npm run xo --ext js,jsx,json"
+    "xo:watch": "npx nodemon -x npm run xo --ext js,ts,json"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,8 @@
     "glob": "^7.2.0",
     "typescript": "^4.5.5",
     "xo": "^0.47.0"
+  },
+  "dependencies": {
+    "canvas": "^2.9.0"
   }
 }
