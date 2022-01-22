@@ -3,20 +3,36 @@
   "version": "0.0.1",
   "description": "A way to pass away a password before you pass away.",
   "main": "index.html",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node ./scripts/build.js --minify",
+    "dev": "node ./scripts/build.js --watch --platform=browser --sourcemap",
+    "test": "xo",
+    "xo": "xo --fix",
+    "xo:watch": "npx nodemon -x npm run xo --ext js,jsx,json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Primajin/pass-a-way.git"
   },
+  "keywords": [
+    "cryptography",
+    "passwords",
+    "steganography",
+    "death",
+    "insurance",
+    "afterlife"
+  ],
   "author": "Jannis Hell",
-  "license": "UNLICENSED",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Primajin/pass-a-way/issues"
   },
   "homepage": "https://github.com/Primajin/pass-a-way#readme",
-  "dependencies": {
-    "milligram": "^1.1.0"
+  "devDependencies": {
+    "esbuild": "^0.14.13",
+    "glob": "^7.2.0",
+    "typescript": "^4.5.5",
+    "xo": "^0.47.0"
   }
 }
