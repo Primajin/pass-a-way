@@ -37,3 +37,12 @@ context.fillText('pass-a-way.net', 600, 530);
 
 const buffer = canvas.toBuffer('image/png');
 fs.writeFileSync('./dist/test.png', buffer);
+
+const {randomBytes} = await import('node:crypto');
+randomBytes(256, (error, buffer) => {
+	if (error) {
+		throw error;
+	}
+
+	console.log(`${buffer.length} bytes of random data: ${buffer.toString('hex')}`);
+});
