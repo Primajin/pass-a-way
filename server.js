@@ -3,6 +3,8 @@ import canvasPKG from 'canvas';
 
 const {createCanvas} = canvasPKG;
 
+const getRandomInt = max => Math.floor(Math.random() * max);
+
 const width = 1200;
 const height = 630;
 
@@ -11,6 +13,11 @@ const context = canvas.getContext('2d');
 
 context.fillStyle = '#000';
 context.fillRect(0, 0, width, height);
+
+for (let i = 500; i--;) {
+	context.fillStyle = 'rgba(' + getRandomInt(256) + ',' + getRandomInt(256) + ',' + getRandomInt(256) + ',' + (getRandomInt(256) / 255) + ')';
+	context.fillRect(getRandomInt(width), getRandomInt(height), 1, 1);
+}
 
 context.font = 'bold 70pt Sans';
 context.textAlign = 'center';
