@@ -1,4 +1,6 @@
+/* eslint max-depth: ["error", 5] */
 import fs from 'node:fs';
+import {randomInt} from 'node:crypto';
 import canvasPKG from 'canvas';
 
 const {createCanvas} = canvasPKG;
@@ -12,20 +14,9 @@ const middlePoint = [width / 2, height / 2];
 const temporaryImage = createCanvas(width, height);
 const temporaryImageContext = temporaryImage.getContext('2d');
 
-/**
- * Generates random number between min and max (inclusive)
- * @param {number} [max=255] - Max value
- * @param {number} [min=0] - Min value
- * @returns {number}
- */
-const getRandomIntInclusive = (max = 255, min = 0) => {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor((Math.random() * (max - min + 1)) + min); // The maximum is inclusive and the minimum is inclusive
-};
-
 const text = 'Hello, World!';
-temporaryImageContext.font = 'bold 70pt Sans';
+// eslint-disable-next-line no-warning-comments
+temporaryImageContext.font = 'bold 70pt monospace'; // TODO: calculate max font size based on text length
 temporaryImageContext.textAlign = 'center';
 temporaryImageContext.textBaseline = 'middle';
 temporaryImageContext.fillStyle = '#000';
@@ -36,33 +27,9 @@ for (let i = 0; i < GENERATE_IMAGE_COUNT; i++) {
 	images[i] = createCanvas(width, height);
 }
 
-// We need to generate a random number for each pixel
-// the number should be between 0 and the number of images we want to generate - 1
-// the crypto buffer gives us random hexadecimal numbers
-// we just need to convert them to the radix of the number of images
-// a radix of 2 will give us a binary number with four digits
-// a radix of 3 will give us a ternary number with three digits
-// a radix of up to 10 will give us a decimal number with always two digits
-// we can divide the overall amount of needed randoms by the number of digits we get to save some time
-
-// const divider = images.length === 2 ? 4 : (images.length === 3 ? 3 : 2);
-//
-// const {randomBytes} = await import('node:crypto');
-// randomBytes(((width * height) / divider), (error, buffer) => {
-// 	if (error) {
-// 		throw error;
-// 	}
-//
-// 	console.log(`${buffer.length} bytes of random data: ${buffer.toString('hex')}`);
-// 	const bufferString = buffer.toString('hex');
-//
-// 	console.log('bufferString.length', width * height, bufferString.length, bufferString.length / (width * height));
-// 	console.log(0xF.toString(images.length));
-// });
-
 for (let x = 0; x < width; x++) {
 	for (let y = 0; y < height; y++) {
-		const index = getRandomIntInclusive(images.length - 1); // TODO: get random number from crypto
+		const index = randomInt(images.length);
 		const pixelData = temporaryImageContext.getImageData(x, y, 1, 1).data;
 
 		if (pixelData[3] === 0) { // Check if the color is empty
@@ -91,7 +58,15 @@ for (let x = 0; x < width; x++) {
 	}
 }
 
-fs.writeFileSync('./dist/tempImage.png', temporaryImage.toBuffer());
+// Clean up
+const path = './dist/';
+const regex = /\.png$/;
+fs.readdirSync(path).filter(f => regex.test(f)).map(f => fs.unlinkSync(path + f));
+
+// Save temp image - for debugging purposes - REMOVE IN PRODUCTION
+fs.writeFileSync(path + 'tempImage.png', temporaryImage.toBuffer());
+
+// Save images
 for (const [i, image] of images.entries()) {
 	const imageContext = image.getContext('2d');
 	imageContext.fillStyle = '#000';
@@ -100,5 +75,5 @@ for (const [i, image] of images.entries()) {
 	imageContext.textBaseline = 'bottom';
 	imageContext.fillText('pass-a-way.net', middlePoint[0], height - 10);
 
-	fs.writeFileSync('./dist/image' + i + '.png', image.toBuffer());
+	fs.writeFileSync(path + 'image' + i + '.png', image.toBuffer());
 }
