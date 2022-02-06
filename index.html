@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <title>Pass·a·way</title>
   <link rel="stylesheet" href="milligram.min.css">
+  <style>
+    .holder {
+      position: relative;
+    }
+    .holder > * {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .holder > *:first-child {
+      position: static;
+    }
+  </style>
 </head>
 <body>
 <h1>Pass·a·way</h1>
@@ -12,9 +25,9 @@
 <p><img src="dist/image0.png" alt="Image 0"></p>
 <p><img src="dist/image1.png" alt="Image 1"></p>
 <p><img style="border: 1px solid #ccc;" src="dist/tempImage.png" alt="Temp Image"></p>
-<p style="position: relative">
+<p class="holder server">
   <img src="dist/image0.png" alt="Image 0">
-  <img style="position: absolute; left: 0; top: 0" src="dist/image1.png" alt="Image 1">
+  <img src="dist/image1.png" alt="Image 1">
 </p>
 <script src="dist/browser.js"></script>
 </body>
