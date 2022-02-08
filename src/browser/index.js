@@ -1,3 +1,4 @@
+/* global document */
 import {generateImage} from '../lib/index.js';
 
 const newDiv = document.createElement('div');

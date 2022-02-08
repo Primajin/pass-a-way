@@ -1,3 +1,4 @@
+/* eslint max-depth: ["error", 5] */
 /**
  * Generates two images based on the given text and randomizes the pixels between them.
  * @param {function} createCanvas - A function that creates a canvas element.
