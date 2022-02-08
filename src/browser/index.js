@@ -14,7 +14,7 @@ const createCanvas = (width, height) => {
 
 const randomInt = max => Math.floor(Math.random() * max);
 const text = 'Hello, World!';
-const {images, temporaryImage} = generateImage(createCanvas, randomInt, text);
+const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text);
 
 for (const image of images) {
 	const imageContext = image.getContext('2d');
@@ -22,7 +22,7 @@ for (const image of images) {
 	imageContext.font = 'bold 30pt Sans';
 	imageContext.textAlign = 'center';
 	imageContext.textBaseline = 'bottom';
-	imageContext.fillText('pass-a-way.net', 400, 300 - 10);
+	imageContext.fillText('pass-a-way.net', middlePoint[0], 300 - 10);
 
 	document.body.append(image);
 }

@@ -8,7 +8,7 @@ import {generateImage} from '../lib/index.js';
 const {createCanvas} = canvasPKG;
 
 const text = 'Hello, World!';
-const {images, temporaryImage} = generateImage(createCanvas, randomInt, text);
+const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text);
 
 // Clean up
 const path = './dist/';
@@ -25,7 +25,7 @@ for (const [i, image] of images.entries()) {
 	imageContext.font = 'bold 30pt Sans';
 	imageContext.textAlign = 'center';
 	imageContext.textBaseline = 'bottom';
-	imageContext.fillText('pass-a-way.net', 400, 300 - 10);
+	imageContext.fillText('pass-a-way.net', middlePoint[0], 300 - 10);
 
 	fs.writeFileSync(path + 'image' + i + '.png', image.toBuffer());
 }

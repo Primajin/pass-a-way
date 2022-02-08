@@ -4,7 +4,7 @@
  * @param {function} createCanvas - A function that creates a canvas element.
  * @param {function} randomInt - A function that generates a random integer.
  * @param {string} text - The text to be used in the image.
- * @returns {{images: *[], temporaryImage}}
+ * @returns {{images: canvas[], middlePoint: [number, number], temporaryImage: canvas}}
  */
 export const generateImage = (createCanvas, randomInt, text) => {
 	const IMAGE_SIZE = [800, 300]; // Image size
@@ -61,6 +61,7 @@ export const generateImage = (createCanvas, randomInt, text) => {
 
 	return {
 		images,
+		middlePoint,
 		temporaryImage,
 	};
 };
