@@ -1,4 +1,11 @@
-export const generateImage = createCanvas => {
+/**
+ * Generates two images based on the given text and randomizes the pixels between them.
+ * @param {function} createCanvas - A function that creates a canvas element.
+ * @param {function} randomInt - A function that generates a random integer.
+ * @param {string} text - The text to be used in the image.
+ * @returns {{images: *[], temporaryImage}}
+ */
+export const generateImage = (createCanvas, randomInt, text) => {
 	const IMAGE_SIZE = [800, 300]; // Image size
 	const GENERATE_IMAGE_COUNT = 2; // How many images you would like to generate (2-10)
 
@@ -8,7 +15,6 @@ export const generateImage = createCanvas => {
 	const temporaryImage = createCanvas(width, height);
 	const temporaryImageContext = temporaryImage.getContext('2d');
 
-	const text = 'Hello, World!';
 	// eslint-disable-next-line no-warning-comments
 	temporaryImageContext.font = 'bold 70pt monospace'; // TODO: calculate max font size based on text length
 	temporaryImageContext.textAlign = 'center';
@@ -23,7 +29,7 @@ export const generateImage = createCanvas => {
 
 	for (let x = 0; x < width; x++) {
 		for (let y = 0; y < height; y++) {
-			const index = Math.floor(Math.random() * images.length); // RandomInt(images.length);
+			const index = randomInt(images.length);
 			const pixelData = temporaryImageContext.getImageData(x, y, 1, 1).data;
 
 			if (pixelData[3] === 0) { // Check if the color is empty

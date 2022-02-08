@@ -11,7 +11,9 @@ const createCanvas = (width, height) => {
 	return canvas;
 };
 
-const {images, temporaryImage} = generateImage(createCanvas);
+const randomInt = max => Math.floor(Math.random() * max);
+const text = 'Hello, World!';
+const {images, temporaryImage} = generateImage(createCanvas, randomInt, text);
 
 for (const image of images) {
 	const imageContext = image.getContext('2d');
