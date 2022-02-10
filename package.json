@@ -14,7 +14,7 @@
     "dev": "npm run build:browser -- --watch --sourcemap",
     "lint": "xo",
     "lint:fix": "xo --fix",
-    "lint:watch": "npx nodemon -x npm run lint:fix --ext js,ts,json",
+    "lint:watch": "npx nodemon -x npm run lint:fix --ext js,json",
     "node": "npx nodemon src/node/index.js --ext js"
   },
   "repository": {
