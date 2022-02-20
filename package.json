@@ -2,21 +2,47 @@
   "name": "pass-a-way",
   "version": "0.0.1",
   "description": "A way to pass away a password before you pass away.",
-  "main": "index.html",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run build:browser & npm run build:server",
+    "build:browser": "node scripts/build.js --minify",
+    "build:server": "ncc build src/node/index.js -m -o dist/server",
+    "coverage": "c8 --reporter=lcov ava",
+    "dev": "node scripts/build.js --watch --sourcemap",
+    "lint": "xo",
+    "lint:fix": "xo --fix",
+    "lint:watch": "npx nodemon -x npm run lint:fix --ext js,json",
+    "node": "npx nodemon src/node/index.js --ext js",
+    "test": "ava",
+    "test:watch": "ava --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Primajin/pass-a-way.git"
   },
+  "keywords": [
+    "cryptography",
+    "passwords",
+    "steganography",
+    "death",
+    "insurance",
+    "afterlife"
+  ],
   "author": "Jannis Hell",
-  "license": "UNLICENSED",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Primajin/pass-a-way/issues"
   },
   "homepage": "https://github.com/Primajin/pass-a-way#readme",
+  "devDependencies": {
+    "@vercel/ncc": "^0.33.3",
+    "ava": "^4.0.1",
+    "c8": "^7.11.0",
+    "esbuild": "^0.14.23",
+    "xo": "^0.47.0"
+  },
   "dependencies": {
-    "milligram": "^1.1.0"
+    "canvas": "^2.9.0"
   }
 }
