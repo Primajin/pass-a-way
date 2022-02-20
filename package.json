@@ -2,17 +2,19 @@
   "name": "pass-a-way",
   "version": "0.0.1",
   "description": "A way to pass away a password before you pass away.",
-  "main": "index.html",
-  "type": "module",
+  "private": true,
   "scripts": {
+    "build": "npm run build:browser && npm run build:server",
+    "build:browser": "webpack",
+    "build:server": "ncc build src/node/index.js -m -o dist/server",
     "coverage": "c8 --reporter=lcov ava",
-    "test": "ava",
-    "test:watch": "ava --watch",
     "dev": "npm run build:browser -- --watch --sourcemap",
     "lint": "xo",
     "lint:fix": "xo --fix",
     "lint:watch": "npx nodemon -x npm run lint:fix --ext js,json",
-    "node": "npx nodemon src/node/index.js --ext js"
+    "node": "npx nodemon src/node/index.js --ext js",
+    "test": "ava",
+    "test:watch": "ava --watch"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
   },
   "homepage": "https://github.com/Primajin/pass-a-way#readme",
   "devDependencies": {
+    "@vercel/ncc": "^0.33.3",
     "ava": "^4.0.1",
     "c8": "^7.11.0",
     "webpack": "^5.69.1",

@@ -1,21 +1,11 @@
-import path from "path";
+const path = require('path');
 
-const serverConfig = {
-	target: 'node',
+module.exports = {
+	mode: process.env.NODE_ENV || 'production',
 	output: {
-		path: path.resolve(__dirname, 'dist'),
-		filename: 'lib.node.js',
+		clean: true,
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'dist/browser'),
 	},
-	//…
+	entry: './src/browser/index.js',
 };
-
-const clientConfig = {
-	target: 'web', // <=== can be omitted as default is 'web'
-	output: {
-		path: path.resolve(__dirname, 'dist'),
-		filename: 'lib.js',
-	},
-	//…
-};
-
-module.exports = [serverConfig, clientConfig];
