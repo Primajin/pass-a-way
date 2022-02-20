@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "description": "A way to pass away a password before you pass away.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "npm run build:browser && npm run build:server",
-    "build:browser": "webpack",
+    "build": "npm run build:browser & npm run build:server",
+    "build:browser": "node scripts/build.js --minify",
     "build:server": "ncc build src/node/index.js -m -o dist/server",
     "coverage": "c8 --reporter=lcov ava",
-    "dev": "npm run build:browser -- --watch --sourcemap",
+    "dev": "node scripts/build.js --watch --sourcemap",
     "lint": "xo",
     "lint:fix": "xo --fix",
     "lint:watch": "npx nodemon -x npm run lint:fix --ext js,json",
@@ -38,8 +39,7 @@
     "@vercel/ncc": "^0.33.3",
     "ava": "^4.0.1",
     "c8": "^7.11.0",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2",
+    "esbuild": "^0.14.23",
     "xo": "^0.47.0"
   },
   "dependencies": {
