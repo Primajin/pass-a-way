@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {randomInt} from 'node:crypto';
 import canvasPKG from 'canvas';
 
-import {generateImage} from '../lib/index.js';
+import {generateImage, addUrl} from '../lib/index.js';
 
 const {createCanvas} = canvasPKG;
 
@@ -21,11 +21,6 @@ fs.writeFileSync(path + 'tempImage.png', temporaryImage.toBuffer());
 // Save images
 for (const [i, image] of images.entries()) {
 	const imageContext = image.getContext('2d');
-	imageContext.fillStyle = '#000';
-	imageContext.font = 'bold 30pt Sans';
-	imageContext.textAlign = 'center';
-	imageContext.textBaseline = 'bottom';
-	imageContext.fillText('pass-a-way.net', middlePoint[0], 300 - 10);
-
+	addUrl(imageContext, middlePoint);
 	fs.writeFileSync(path + 'image' + i + '.png', image.toBuffer());
 }

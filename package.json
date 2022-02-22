@@ -9,11 +9,11 @@
     "build:browser": "node scripts/build.js --minify",
     "build:server": "ncc build src/node/index.js -m -o dist/server",
     "coverage": "c8 --reporter=lcov ava",
-    "dev": "node scripts/build.js --watch --sourcemap",
+    "dev:browser": "node scripts/build.js --watch --sourcemap",
+    "dev:node": "npx nodemon src/node/index.js --ext js",
     "lint": "xo",
     "lint:fix": "xo --fix",
     "lint:watch": "npx nodemon -x npm run lint:fix --ext js,json",
-    "node": "npx nodemon src/node/index.js --ext js",
     "test": "ava",
     "test:watch": "ava --watch"
   },

@@ -22,13 +22,24 @@
 <h1>Pass·a·way</h1>
 <h3>A way to pass away a way before you pass away.</h3>
 <p>Jannis Hell, Friedrich-Wilhelm-Platz 2, 12161 Berlin</p>
-<p><img src="dist/image0.png" alt="Image 0"></p>
-<p><img src="dist/image1.png" alt="Image 1"></p>
-<p><img style="border: 1px solid #ccc;" src="dist/tempImage.png" alt="Temp Image"></p>
-<p class="holder server">
-  <img src="dist/image0.png" alt="Image 0">
-  <img src="dist/image1.png" alt="Image 1">
-</p>
-<script src="dist/browser/index.js"></script>
+<fieldset id="server">
+  <legend>Node js</legend>
+  <p><img src="dist/image0.png" alt="Image 0"></p>
+  <p><img src="dist/image1.png" alt="Image 1"></p>
+  <p><img style="border: 1px solid #ccc;" src="dist/tempImage.png" alt="Temp Image"></p>
+  <p class="holder server">
+    <img src="dist/image0.png" alt="Image 0">
+    <img src="dist/image1.png" alt="Image 1">
+  </p>
+</fieldset>
+<fieldset id="browser">
+  <legend>Browser</legend>
+  <label>
+    Secret:
+    <input type="text" name="text" maxlength="45" onchange="window.createImages()">
+  </label>
+  <div class="wrapper"></div>
+  <script src="dist/browser/index.js"></script>
+</fieldset>
 </body>
 </html>

@@ -1,5 +1,20 @@
 /* eslint max-depth: ["error", 5] */
 /**
+ * Measures the text length and chooses the best font size.
+ * @param {string} text - The text to measure.
+ * @param canvasContext - The canvas context to use.
+ */
+export const chooseBestFontSize = (text, canvasContext) => {
+	let fontSize = 70;
+	canvasContext.font = `bold ${fontSize}px monospace`;
+	// Keep 30px margin and don't go below 31px font size - otherwise it becomes unreadable
+	while	((canvasContext.measureText(text).width > canvasContext.canvas.width - 30) && fontSize > 31) {
+		fontSize -= 1;
+		canvasContext.font = `bold ${fontSize}px monospace`;
+	}
+};
+
+/**
  * Generates two images based on the given text and randomizes the pixels between them.
  * @param {function} createCanvas - A function that creates a canvas element.
  * @param {function} randomInt - A function that generates a random integer.
@@ -16,12 +31,11 @@ export const generateImage = (createCanvas, randomInt, text) => {
 	const temporaryImage = createCanvas(width, height);
 	const temporaryImageContext = temporaryImage.getContext('2d');
 
-	// eslint-disable-next-line no-warning-comments
-	temporaryImageContext.font = 'bold 70pt monospace'; // TODO: calculate max font size based on text length
 	temporaryImageContext.textAlign = 'center';
 	temporaryImageContext.textBaseline = 'middle';
 	temporaryImageContext.fillStyle = '#000';
-	temporaryImageContext.fillText(text, middlePoint[0], middlePoint[1]);
+	chooseBestFontSize(text, temporaryImageContext);
+	temporaryImageContext.fillText(text, middlePoint[0], middlePoint[1]); // TODO: randomize position
 
 	const images = [];
 	for (let i = 0; i < GENERATE_IMAGE_COUNT; i++) {
@@ -64,4 +78,19 @@ export const generateImage = (createCanvas, randomInt, text) => {
 		middlePoint,
 		temporaryImage,
 	};
+};
+
+export default generateImage;
+
+/**
+ * Adds a text with the passaway URL to the bottom of the image.
+ * @param imageContext
+ * @param {Array} middlePoint
+ */
+export const addUrl = (imageContext, middlePoint) => {
+	imageContext.fillStyle = '#000';
+	imageContext.font = 'bold 30pt Sans';
+	imageContext.textAlign = 'center';
+	imageContext.textBaseline = 'bottom';
+	imageContext.fillText('pass-a-way.net', middlePoint[0], 300 - 10);
 };

@@ -1,9 +1,8 @@
-/* global document */
-import {generateImage} from '../lib/index.js';
+/* global document, window */
+import {generateImage, addUrl} from '../lib/index.js';
 
-const newDiv = document.createElement('div');
-newDiv.innerHTML = 'Hello World';
-document.body.append(newDiv);
+const browserElement = document.querySelector('#browser .wrapper');
+const inputElement = document.querySelector('#browser input');
 
 const createCanvas = (width, height) => {
 	const canvas = document.createElement('canvas');
@@ -13,34 +12,41 @@ const createCanvas = (width, height) => {
 };
 
 const randomInt = max => Math.floor(Math.random() * max);
-const text = 'Hello, World!';
-const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text);
 
-for (const image of images) {
-	const imageContext = image.getContext('2d');
-	imageContext.fillStyle = '#000';
-	imageContext.font = 'bold 30pt Sans';
-	imageContext.textAlign = 'center';
-	imageContext.textBaseline = 'bottom';
-	imageContext.fillText('pass-a-way.net', middlePoint[0], 300 - 10);
+const createImages = () => {
+	while (browserElement.firstChild) {
+		browserElement.firstChild.remove();
+	}
 
-	document.body.append(image);
-}
+	const text = inputElement.value;
+	if (text && text.length <= 45) {
+		const {images, middlePoint, temporaryImage} = generateImage(createCanvas,
+			randomInt, text);
 
-document.body.append(temporaryImage);
+		for (const image of images) {
+			const imageContext = image.getContext('2d');
+			addUrl(imageContext, middlePoint);
+			browserElement.append(image);
+		}
 
-const cloneCanvas = oldCanvas => {
-	const newCanvas = document.createElement('canvas');
-	const context = newCanvas.getContext('2d');
-	newCanvas.width = oldCanvas.width;
-	newCanvas.height = oldCanvas.height;
-	context.drawImage(oldCanvas, 0, 0);
-	return newCanvas;
+		browserElement.append(temporaryImage);
+
+		const cloneCanvas = oldCanvas => {
+			const newCanvas = document.createElement('canvas');
+			const context = newCanvas.getContext('2d');
+			newCanvas.width = oldCanvas.width;
+			newCanvas.height = oldCanvas.height;
+			context.drawImage(oldCanvas, 0, 0);
+			return newCanvas;
+		};
+
+		const elementDiv = document.createElement('div');
+		elementDiv.classList.add('holder', 'browser');
+		browserElement.append(elementDiv);
+		for (const image of images) {
+			document.querySelector('.browser').append(cloneCanvas(image));
+		}
+	}
 };
 
-const elementDiv = document.createElement('div');
-elementDiv.classList.add('holder', 'browser');
-document.body.append(elementDiv);
-for (const image of images) {
-	document.querySelector('.browser').append(cloneCanvas(image));
-}
+window.createImages = createImages;
