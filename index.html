@@ -8,12 +8,13 @@
     .holder {
       position: relative;
     }
-    .holder > * {
+    .holder > canvas,
+    .holder > img {
       position: absolute;
       left: 0;
       top: 0;
     }
-    .holder > *:first-child {
+    .holder > :first-child {
       position: static;
     }
   </style>
