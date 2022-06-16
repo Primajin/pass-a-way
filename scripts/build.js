@@ -1,6 +1,6 @@
 import {build} from 'esbuild';
 
-const parameters = process.argv.slice(2); // eslint-disable-line node/prefer-global/process
+const parameters = process.argv.slice(2); // eslint-disable-line n/prefer-global/process
 
 /**
  * Iterate through the parameters and set the build parameters
