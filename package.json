@@ -4,6 +4,9 @@
   "description": "A way to pass away a password before you pass away.",
   "private": true,
   "type": "module",
+  "engines" : {
+    "node" : "<18"
+  },
   "scripts": {
     "build": "npm run build:browser & npm run build:server",
     "build:browser": "node scripts/build.js --minify",
@@ -39,10 +42,10 @@
     "@vercel/ncc": "^0.34.0",
     "ava": "^4.3.0",
     "c8": "^7.11.3",
-    "esbuild": "^0.14.43",
+    "esbuild": "^0.14.48",
     "xo": "^0.50.0"
   },
   "dependencies": {
-    "canvas": "^2.9.1"
+    "canvas": "^2.9.3"
   }
 }
