@@ -43,6 +43,7 @@ build({
 	...getBuildParameters(parameters),
 }).then(() => {
 	console.log('Build complete', new Date().toLocaleString());
+	// eslint-disable-next-line unicorn/prefer-top-level-await
 }).catch(error => {
 	console.error(error);
 });

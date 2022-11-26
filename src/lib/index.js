@@ -35,6 +35,7 @@ export const generateImage = (createCanvas, randomInt, text) => {
 	temporaryImageContext.textBaseline = 'middle';
 	temporaryImageContext.fillStyle = '#000';
 	chooseBestFontSize(text, temporaryImageContext);
+	// eslint-disable-next-line no-warning-comments
 	temporaryImageContext.fillText(text, middlePoint[0], middlePoint[1]); // TODO: randomize position
 
 	const images = [];
