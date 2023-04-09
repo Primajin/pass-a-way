@@ -34,9 +34,7 @@ const getBuildParameters = parameters => {
 	return buildParameters;
 };
 
-const context = await esbuild.context({
-	...getBuildParameters(parameters),
-});
+const context = await esbuild.context({...getBuildParameters(parameters)});
 
 if (watchmode) {
 	try {
@@ -46,5 +44,6 @@ if (watchmode) {
 		console.error(error);
 	}
 } else {
+	await context.rebuild();
 	context.dispose();
 }
