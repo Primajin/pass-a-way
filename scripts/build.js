@@ -1,6 +1,8 @@
-import {build} from 'esbuild';
+import * as esbuild from 'esbuild';
 
 const parameters = process.argv.slice(2); // eslint-disable-line n/prefer-global/process
+
+let watchmode = false;
 
 /**
  * Iterate through the parameters and set the build parameters
@@ -24,26 +26,23 @@ const getBuildParameters = parameters => {
 	}
 
 	if (buildParameters.watch) {
-		buildParameters.watch = {
-			onRebuild(error) {
-				if (error) {
-					console.error('watch build failed:', error);
-				} else {
-					console.log('Build complete', new Date().toLocaleString());
-				}
-			},
-		};
-		console.log('Watching for changes...');
+		watchmode = true;
 	}
+
+	delete buildParameters.watch;
 
 	return buildParameters;
 };
 
-build({
+const context = await esbuild.context({
 	...getBuildParameters(parameters),
-}).then(() => {
-	console.log('Build complete', new Date().toLocaleString());
-	// eslint-disable-next-line unicorn/prefer-top-level-await
-}).catch(error => {
-	console.error(error);
 });
+
+if (watchmode) {
+	try {
+		console.log('Watching for changes...');
+		await context.watch();
+	} catch (error) {
+		console.error(error);
+	}
+}
