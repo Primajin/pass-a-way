@@ -46,5 +46,5 @@ if (watchmode) {
 		console.error(error);
 	}
 } else {
-	context.dispose()
+	context.dispose();
 }
