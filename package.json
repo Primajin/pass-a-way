@@ -40,7 +40,7 @@
   "homepage": "https://github.com/Primajin/pass-a-way#readme",
   "devDependencies": {
     "@vercel/ncc": "^0.36.1",
-    "ava": "^5.3.0",
+    "ava": "^5.3.1",
     "c8": "^8.0.0",
     "esbuild": "^0.17.19",
     "xo": "^0.54.2"
