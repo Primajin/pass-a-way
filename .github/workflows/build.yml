@@ -18,7 +18,7 @@ jobs:
           node-version: '17' # canvas not yet available for node 18
           cache: 'npm'
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
