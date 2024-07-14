@@ -4,8 +4,8 @@
   "description": "A way to pass away a password before you pass away.",
   "private": true,
   "type": "module",
-  "engines" : {
-    "node" : ">=17.0.0 <18"
+  "engines": {
+    "node": "^21"
   },
   "scripts": {
     "build": "npm run build:browser & npm run build:server",
@@ -46,7 +46,7 @@
     "xo": "^0.58.0"
   },
   "dependencies": {
-    "canvas": "^2.11.2"
+    "canvas": "^3.0.0-rc2"
   },
   "xo": {
     "rules": {
