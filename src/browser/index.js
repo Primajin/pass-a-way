@@ -50,5 +50,5 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	window.createImages = createImages;
+	globalThis.createImages = createImages;
 });
