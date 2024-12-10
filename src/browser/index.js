@@ -1,4 +1,4 @@
-/* global document, window */
+/* global document */
 import {generateImage, addUrl} from '../lib/index.js';
 
 document.addEventListener('DOMContentLoaded', () => {
