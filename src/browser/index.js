@@ -21,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const text = inputElement.value;
 		if (text && text.length <= 45) {
-			const {images, middlePoint, temporaryImage} = generateImage(createCanvas,
-				randomInt, text);
+			const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text);
 
 			for (const image of images) {
 				const imageContext = image.getContext('2d');
