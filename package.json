@@ -11,7 +11,7 @@
     "build": "npm run build:browser & npm run build:server",
     "build:browser": "node scripts/build.js --minify",
     "build:server": "ncc build src/node/index.js -m -o dist/server",
-    "coverage": "c8 --reporter=lcov ava",
+    "coverage": "c8 --reporter=lcov --all --include 'src/**' ava",
     "dev:browser": "node scripts/build.js --watch --sourcemap",
     "dev:node": "npx nodemon src/node/index.js --ext js",
     "lint": "xo",
