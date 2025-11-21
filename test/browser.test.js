@@ -3,7 +3,7 @@ import {JSDOM} from 'jsdom';
 
 // Note: '../src/browser/index.js' is NOT imported at the top level.
 
-test.beforeEach(async t => {
+test.beforeEach(async () => {
 	const dom = new JSDOM('<!DOCTYPE html><html><body><div id="browser"><div class="wrapper"></div><input value="test"></div></body></html>');
 	globalThis.document = dom.window.document;
 	globalThis.window = dom.window;
@@ -17,7 +17,7 @@ test.beforeEach(async t => {
 	t.pass();
 });
 
-test.afterEach(t => {
+test.afterEach(() => {
 	// Clean up globals to avoid polluting other tests
 	delete globalThis.window;
 	delete globalThis.document;
