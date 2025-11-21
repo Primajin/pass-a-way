@@ -14,6 +14,7 @@ test.beforeEach(async t => {
 	// The script adds an event listener for DOMContentLoaded. We need to trigger it.
 	const event = new dom.window.Event('DOMContentLoaded');
 	dom.window.document.dispatchEvent(event);
+	t.pass();
 });
 
 test.afterEach(t => {
@@ -21,6 +22,7 @@ test.afterEach(t => {
 	delete globalThis.window;
 	delete globalThis.document;
 	delete globalThis.createImages;
+	t.pass();
 });
 
 test('createImages is defined', t => {

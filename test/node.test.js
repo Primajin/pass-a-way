@@ -17,6 +17,7 @@ const clearDist = () => {
 test.after.always(t => {
 	// Clean up the dist directory after all tests are done
 	clearDist();
+	t.pass();
 });
 
 test.beforeEach(t => {
@@ -26,6 +27,7 @@ test.beforeEach(t => {
 	}
 
 	clearDist();
+	t.pass();
 });
 
 test('node script generates images', async t => {
