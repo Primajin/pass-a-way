@@ -5,8 +5,8 @@ import {JSDOM} from 'jsdom';
 
 test.beforeEach(async t => {
 	const dom = new JSDOM('<!DOCTYPE html><html><body><div id="browser"><div class="wrapper"></div><input value="test"></div></body></html>');
-	global.document = dom.window.document;
-	global.window = dom.window;
+	globalThis.document = dom.window.document;
+	globalThis.window = dom.window;
 
 	// Dynamically import the browser script AFTER the DOM environment is set up.
 	await import('../src/browser/index.js');
@@ -17,19 +17,19 @@ test.beforeEach(async t => {
 });
 
 test.afterEach(t => {
-    // Clean up globals to avoid polluting other tests
-    delete global.window;
-    delete global.document;
-    delete global.createImages;
+	// Clean up globals to avoid polluting other tests
+	delete globalThis.window;
+	delete globalThis.document;
+	delete globalThis.createImages;
 });
 
 test('createImages is defined', t => {
-	t.truthy(global.createImages);
+	t.truthy(globalThis.createImages);
 });
 
 test('createImages creates images', t => {
-	global.createImages();
-	const images = global.document.querySelectorAll('canvas');
+	globalThis.createImages();
+	const images = globalThis.document.querySelectorAll('canvas');
 	// 2 images + temporaryImage + 2 clones = 5
 	t.is(images.length, 5);
 });
