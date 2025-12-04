@@ -14,13 +14,13 @@ const clearDist = () => {
 	}
 };
 
-test.after.always(() => {
+test.after.always(t => {
 	// Clean up the dist directory after all tests are done
 	clearDist();
 	t.pass();
 });
 
-test.beforeEach(() => {
+test.beforeEach(t => {
 	// Ensure the dist directory exists and is empty before each test
 	if (!fs.existsSync(distPath)) {
 		fs.mkdirSync(distPath);
