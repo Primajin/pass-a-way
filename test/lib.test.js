@@ -68,6 +68,31 @@ test('generateImage', t => {
 	t.truthy(result.temporaryImage);
 });
 
+test('generateImage with empty pixel and non-zero random', t => {
+	const mockContext = {
+		font: '',
+		measureText: () => ({width: 500}),
+		canvas: {width: 800, height: 300},
+		textAlign: '',
+		textBaseline: '',
+		fillStyle: '',
+		fillText() {},
+		getImageData: () => ({data: [0, 0, 0, 0]}),
+		fillRect() {},
+		clearRect() {},
+	};
+	const createCanvas = () => ({
+		getContext: () => mockContext,
+	});
+	const randomInt = () => 1;
+
+	const result = generateImage(createCanvas, randomInt, 'test');
+
+	t.is(result.images.length, 2);
+	t.deepEqual(result.middlePoint, [400, 150]);
+	t.truthy(result.temporaryImage);
+});
+
 test('generateImage with non-empty pixel', t => {
 	const mockContext = {
 		font: '',
