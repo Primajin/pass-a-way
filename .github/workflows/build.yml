@@ -28,10 +28,11 @@ jobs:
 
       - name: Run Windows command
         if: matrix.os == 'windows-latest'
+        shell: bash
         run: |
           for i in 1 2 3; do
             choco install -y python3 gtk-runtime microsoft-build-tools libjpeg-turbo && break
-            sleep 30
+            [ $i -lt 3 ] && sleep 30
           done
 
       - name: Run Ubuntu command
