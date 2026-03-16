@@ -8,7 +8,7 @@ test('addUrl', t => {
 		font: '',
 		textAlign: '',
 		textBaseline: '',
-		fillText() {},
+		fillText: () => undefined,
 	};
 
 	addUrl(mockContext, [400, 150]);
@@ -51,10 +51,10 @@ test('generateImage', t => {
 		textAlign: '',
 		textBaseline: '',
 		fillStyle: '',
-		fillText() {},
+		fillText: () => undefined,
 		getImageData: () => ({data: [0, 0, 0, 0]}),
-		fillRect() {},
-		clearRect() {},
+		fillRect: () => undefined,
+		clearRect: () => undefined,
 	};
 	const createCanvas = () => ({
 		getContext: () => mockContext,
@@ -76,10 +76,10 @@ test('generateImage with empty pixel and non-zero random', t => {
 		textAlign: '',
 		textBaseline: '',
 		fillStyle: '',
-		fillText() {},
+		fillText: () => undefined,
 		getImageData: () => ({data: [0, 0, 0, 0]}),
-		fillRect() {},
-		clearRect() {},
+		fillRect: () => undefined,
+		clearRect: () => undefined,
 	};
 	const createCanvas = () => ({
 		getContext: () => mockContext,
@@ -101,10 +101,10 @@ test('generateImage with non-empty pixel', t => {
 		textAlign: '',
 		textBaseline: '',
 		fillStyle: '',
-		fillText() {},
+		fillText: () => undefined,
 		getImageData: () => ({data: [1, 1, 1, 1]}),
-		fillRect() {},
-		clearRect() {},
+		fillRect: () => undefined,
+		clearRect: () => undefined,
 	};
 	const createCanvas = () => ({
 		getContext: () => mockContext,
