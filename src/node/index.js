@@ -12,7 +12,7 @@ const {images, middlePoint, temporaryImage} = generateImage(createCanvas, random
 
 // Clean up
 const path = './dist/';
-const regex = /\.png$/;
+const regex = /\.png$/v;
 fs.readdirSync(path).filter(f => regex.test(f)).map(f => fs.unlinkSync(path + f));
 
 // Save temp image - for debugging purposes - REMOVE IN PRODUCTION
