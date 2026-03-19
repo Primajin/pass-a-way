@@ -1,6 +1,14 @@
 name: "Build"
 
-on: [push, fork]
+on:
+  push:
+  fork:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -37,7 +45,7 @@ jobs:
 
       - name: Run Ubuntu command
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+        run: sudo apt-get update && sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev imagemagick
 
       - name: Run macOS command
         if: matrix.os == 'macos-latest'
@@ -48,3 +56,113 @@ jobs:
 
       - name: Run build
         run: npm run build
+
+      - name: Generate test images
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        run: node src/node/index.js
+
+      - name: Create overlay image
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        run: convert -size 800x300 xc:white dist/image0.png -composite dist/image1.png -composite dist/overlay.png
+
+      - name: Upload images to release and comment on PR
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const tag = 'build-images-placeholder';
+
+            let release;
+            try {
+              const response = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag,
+              });
+              release = response.data;
+            } catch (error) {
+              core.setFailed(`Release "${tag}" not found. Please create it at https://github.com/${context.repo.owner}/${context.repo.repo}/releases/new?tag=${tag}`);
+              return;
+            }
+
+            const prNumber = context.payload.pull_request.number;
+            const img0Name = `pr-${prNumber}-image0.png`;
+            const img1Name = `pr-${prNumber}-image1.png`;
+            const overlayName = `pr-${prNumber}-overlay.png`;
+            const files = [
+              { name: img0Name, path: 'dist/image0.png' },
+              { name: img1Name, path: 'dist/image1.png' },
+              { name: overlayName, path: 'dist/overlay.png' },
+            ];
+
+            const uploadedUrls = {};
+
+            for (const file of files) {
+              // Delete existing asset with same name if it exists
+              const existingAsset = release.assets.find(a => a.name === file.name);
+              if (existingAsset) {
+                await github.rest.repos.deleteReleaseAsset({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  asset_id: existingAsset.id,
+                });
+              }
+
+              // Upload new asset
+              const data = fs.readFileSync(file.path);
+              const { data: asset } = await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.id,
+                name: file.name,
+                data,
+                headers: {
+                  'content-type': 'image/png',
+                  'content-length': data.length,
+                },
+              });
+
+              uploadedUrls[file.name] = asset.browser_download_url;
+            }
+
+            const body = [
+              '## 🔍 Build Test Images',
+              '',
+              '| Image 0 | Image 1 |',
+              '|---------|---------|',
+              `| ![image0](${uploadedUrls[img0Name]}) | ![image1](${uploadedUrls[img1Name]}) |`,
+              '',
+              '| Overlay |',
+              '|---------|',
+              `| ![overlay](${uploadedUrls[overlayName]}) |`,
+              '',
+              `> Generated from commit ${context.sha.substring(0, 7)}`,
+            ].join('\n');
+
+            // Find existing bot comment to update instead of creating duplicates
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('## 🔍 Build Test Images')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
