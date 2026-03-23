@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		return canvas;
 	};
 
-	const randomInt = max => Math.floor(Math.random() * max);
+	const randomInt = max => crypto.getRandomValues(new Uint32Array(1))[0] % max;
 
 	const createImages = () => {
 		while (browserElement.firstChild) {
