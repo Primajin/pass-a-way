@@ -96,8 +96,24 @@ test('node script rejects invalid --number value', t => {
 	t.truthy(error);
 });
 
+test('node script rejects unknown options', t => {
+	const error = t.throws(() => {
+		execFileSync('node', ['src/node/index.js', '--unknown'], {encoding: 'utf8'});
+	});
+	t.truthy(error);
+});
+
 test('node script generates images without URL using --no-url', t => {
 	execFileSync('node', ['src/node/index.js', '--no-url']);
+
+	const files = fs.readdirSync(distPath);
+	t.true(files.includes('image0.png'));
+	t.true(files.includes('image1.png'));
+	t.is(files.length, 2);
+});
+
+test('node script generates images without URL using -u flag', t => {
+	execFileSync('node', ['src/node/index.js', '-u']);
 
 	const files = fs.readdirSync(distPath);
 	t.true(files.includes('image0.png'));
