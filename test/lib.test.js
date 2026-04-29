@@ -117,3 +117,51 @@ test('generateImage with non-empty pixel', t => {
 	t.deepEqual(result.middlePoint, [400, 150]);
 	t.truthy(result.temporaryImage);
 });
+
+test('generateImage with 4 images', t => {
+	const mockContext = {
+		font: '',
+		measureText: () => ({width: 500}),
+		canvas: {width: 800, height: 300},
+		textAlign: '',
+		textBaseline: '',
+		fillStyle: '',
+		fillText: () => undefined,
+		getImageData: () => ({data: [0, 0, 0, 0]}),
+		fillRect: () => undefined,
+		clearRect: () => undefined,
+	};
+	const createCanvas = () => ({
+		getContext: () => mockContext,
+	});
+	const randomInt = () => 0;
+
+	const result = generateImage(createCanvas, randomInt, 'test', 4);
+
+	t.is(result.images.length, 4);
+	t.deepEqual(result.middlePoint, [400, 150]);
+	t.truthy(result.temporaryImage);
+});
+
+test('generateImage enforces minimum of 2 images', t => {
+	const mockContext = {
+		font: '',
+		measureText: () => ({width: 500}),
+		canvas: {width: 800, height: 300},
+		textAlign: '',
+		textBaseline: '',
+		fillStyle: '',
+		fillText: () => undefined,
+		getImageData: () => ({data: [0, 0, 0, 0]}),
+		fillRect: () => undefined,
+		clearRect: () => undefined,
+	};
+	const createCanvas = () => ({
+		getContext: () => mockContext,
+	});
+	const randomInt = () => 0;
+
+	const result = generateImage(createCanvas, randomInt, 'test', 1);
+
+	t.is(result.images.length, 2);
+});

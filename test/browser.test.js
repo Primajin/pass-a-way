@@ -33,3 +33,14 @@ test('createImages creates images without temporaryImage', t => {
 	// 2 images + 2 clones = 4 (temporaryImage is not rendered by default)
 	t.is(images.length, 4);
 });
+
+test('createImages clears previous images on re-render', t => {
+	globalThis.createImages();
+	t.is(globalThis.document.querySelectorAll('canvas').length, 4);
+
+	// Call again to trigger the while loop that removes existing children
+	globalThis.createImages();
+	const images = globalThis.document.querySelectorAll('canvas');
+	// Should still be 4, not 8 — old ones were removed
+	t.is(images.length, 4);
+});

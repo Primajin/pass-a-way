@@ -166,3 +166,107 @@ jobs:
                 body,
               });
             }
+
+      - name: Generate 4-image test images
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        run: node src/node/index.js -n 4
+
+      - name: Create 4-image overlay
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        run: convert -size 800x300 xc:white dist/image0.png -composite dist/image1.png -composite dist/image2.png -composite dist/image3.png -composite dist/overlay-4.png
+
+      - name: Upload 4-image results and comment on PR
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const tag = 'build-images-placeholder';
+
+            let release;
+            try {
+              const response = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag,
+              });
+              release = response.data;
+            } catch (error) {
+              core.setFailed(`Release "${tag}" not found.`);
+              return;
+            }
+
+            const prNumber = context.payload.pull_request.number;
+            const fileNames = [];
+            for (let i = 0; i < 4; i++) {
+              fileNames.push({ name: `pr-${prNumber}-4img-image${i}.png`, path: `dist/image${i}.png` });
+            }
+            fileNames.push({ name: `pr-${prNumber}-4img-overlay.png`, path: 'dist/overlay-4.png' });
+
+            const uploadedUrls = {};
+
+            for (const file of fileNames) {
+              const existingAsset = release.assets.find(a => a.name === file.name);
+              if (existingAsset) {
+                await github.rest.repos.deleteReleaseAsset({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  asset_id: existingAsset.id,
+                });
+              }
+
+              const data = fs.readFileSync(file.path);
+              const { data: asset } = await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.id,
+                name: file.name,
+                data,
+                headers: {
+                  'content-type': 'image/png',
+                  'content-length': data.length,
+                },
+              });
+
+              uploadedUrls[file.name] = asset.browser_download_url;
+            }
+
+            const body = [
+              '## 🔍 Build Test Images (4-image split)',
+              '',
+              '| Image 0 | Image 1 | Image 2 | Image 3 |',
+              '|---------|---------|---------|---------|',
+              `| ![image0](${uploadedUrls[`pr-${prNumber}-4img-image0.png`]}) | ![image1](${uploadedUrls[`pr-${prNumber}-4img-image1.png`]}) | ![image2](${uploadedUrls[`pr-${prNumber}-4img-image2.png`]}) | ![image3](${uploadedUrls[`pr-${prNumber}-4img-image3.png`]}) |`,
+              '',
+              '| Overlay |',
+              '|---------|',
+              `| ![overlay](${uploadedUrls[`pr-${prNumber}-4img-overlay.png`]}) |`,
+              '',
+              `> Generated from commit ${context.sha.substring(0, 7)}`,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('## 🔍 Build Test Images (4-image split)')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
