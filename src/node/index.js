@@ -28,7 +28,7 @@ for (let i = 0; i < args.length; i++) {
 		case '--help': {
 			printHelp();
 			process.exit(0);
-			break; // eslint-disable-line no-unreachable
+			break;
 		}
 
 		case '-d':
