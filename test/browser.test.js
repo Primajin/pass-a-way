@@ -27,9 +27,9 @@ test('createImages is defined', t => {
 	t.truthy(globalThis.createImages);
 });
 
-test('createImages creates images', t => {
+test('createImages creates images without temporaryImage', t => {
 	globalThis.createImages();
 	const images = globalThis.document.querySelectorAll('canvas');
-	// 2 images + temporaryImage + 2 clones = 5
-	t.is(images.length, 5);
+	// 2 images + 2 clones = 4 (temporaryImage is not rendered by default)
+	t.is(images.length, 4);
 });

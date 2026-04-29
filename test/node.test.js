@@ -1,3 +1,4 @@
+import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'ava';
@@ -28,7 +29,7 @@ test.beforeEach(() => {
 	clearDist();
 });
 
-test('node script generates images', async t => {
+test('node script generates images without tempImage by default', async t => {
 	// Check that the directory is empty initially
 	let files = fs.readdirSync(distPath);
 	t.is(files.length, 0);
@@ -38,6 +39,30 @@ test('node script generates images', async t => {
 
 	// Check that the expected files were created
 	files = fs.readdirSync(distPath);
+	t.false(files.includes('tempImage.png'));
+	t.true(files.includes('image0.png'));
+	t.true(files.includes('image1.png'));
+	t.is(files.length, 2);
+});
+
+test('node script generates tempImage with --debug flag', t => {
+	// Run the script in a subprocess with the --debug flag
+	execFileSync('node', ['src/node/index.js', '--debug']);
+
+	// Check that the tempImage was created along with the other images
+	const files = fs.readdirSync(distPath);
+	t.true(files.includes('tempImage.png'));
+	t.true(files.includes('image0.png'));
+	t.true(files.includes('image1.png'));
+	t.is(files.length, 3);
+});
+
+test('node script generates tempImage with -d flag', t => {
+	// Run the script in a subprocess with the -d flag
+	execFileSync('node', ['src/node/index.js', '-d']);
+
+	// Check that the tempImage was created along with the other images
+	const files = fs.readdirSync(distPath);
 	t.true(files.includes('tempImage.png'));
 	t.true(files.includes('image0.png'));
 	t.true(files.includes('image1.png'));
