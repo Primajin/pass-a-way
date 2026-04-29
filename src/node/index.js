@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint max-depth: ["error", 5] */
 import fs from 'node:fs';
 import process from 'node:process';
@@ -8,10 +9,57 @@ import {generateImage, addUrl} from '../lib/index.js';
 
 const {createCanvas} = canvasPKG;
 
-const debug = process.argv.includes('-d') || process.argv.includes('--debug');
+const printHelp = () => {
+	console.log(`Usage: node src/node/index.js [options]
+
+Options:
+  -n, --number <count>  Number of images to split the password into (min 2, default 2)
+  -d, --debug           Save a temporary debug image showing the original rendered text
+  -h, --help            Show this help message`);
+};
+
+const args = process.argv.slice(2);
+let imageCount = 2;
+let debug = false;
+
+for (let i = 0; i < args.length; i++) {
+	switch (args[i]) {
+		case '-h':
+		case '--help': {
+			printHelp();
+			process.exit(0);
+			break; // eslint-disable-line no-unreachable
+		}
+
+		case '-d':
+		case '--debug': {
+			debug = true;
+			break;
+		}
+
+		case '-n':
+		case '--number': {
+			const value = Number(args[i + 1]);
+			if (!Number.isInteger(value) || value < 2) {
+				console.error('Error: --number requires an integer value of at least 2');
+				process.exit(1);
+			}
+
+			imageCount = value;
+			i++;
+			break;
+		}
+
+		default: {
+			console.error(`Unknown option: ${args[i]}`);
+			printHelp();
+			process.exit(1);
+		}
+	}
+}
 
 const text = 'Hello, World!';
-const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text);
+const {images, middlePoint, temporaryImage} = generateImage(createCanvas, randomInt, text, imageCount);
 
 // Clean up
 const path = './dist/';

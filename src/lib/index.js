@@ -15,15 +15,16 @@ export const chooseBestFontSize = (text, canvasContext) => {
 };
 
 /**
- * Generates two images based on the given text and randomizes the pixels between them.
+ * Generates images based on the given text and randomizes the pixels between them.
  * @param {function} createCanvas - A function that creates a canvas element.
  * @param {function} randomInt - A function that generates a random integer.
  * @param {string} text - The text to be used in the image.
+ * @param {number} [imageCount=2] - How many images to generate (minimum 2).
  * @returns {{images: canvas[], middlePoint: [number, number], temporaryImage: canvas}}
  */
-export const generateImage = (createCanvas, randomInt, text) => {
+export const generateImage = (createCanvas, randomInt, text, imageCount = 2) => {
 	const IMAGE_SIZE = [800, 300]; // Image size
-	const GENERATE_IMAGE_COUNT = 2; // How many images you would like to generate (2-10)
+	const GENERATE_IMAGE_COUNT = Math.max(2, Math.floor(imageCount)); // How many images you would like to generate (min 2)
 
 	const [width, height] = IMAGE_SIZE;
 	const middlePoint = [width / 2, height / 2];
