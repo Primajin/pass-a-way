@@ -16,12 +16,12 @@ const clearDist = () => {
 };
 
 test.after.always(() => {
-// Clean up the dist directory after all tests are done
+	// Clean up the dist directory after all tests are done
 	clearDist();
 });
 
 test.beforeEach(() => {
-// Ensure the dist directory exists and is empty before each test
+	// Ensure the dist directory exists and is empty before each test
 	if (!fs.existsSync(distPath)) {
 		fs.mkdirSync(distPath);
 	}
@@ -30,7 +30,7 @@ test.beforeEach(() => {
 });
 
 test('node script generates images without tempImage by default', async t => {
-// Check that the directory is empty initially
+	// Check that the directory is empty initially
 	let files = fs.readdirSync(distPath);
 	t.is(files.length, 0);
 
@@ -46,7 +46,7 @@ test('node script generates images without tempImage by default', async t => {
 });
 
 test('node script generates tempImage with --debug flag', t => {
-// Run the script in a subprocess with the --debug flag
+	// Run the script in a subprocess with the --debug flag
 	execFileSync('node', ['src/node/index.js', '--debug']);
 
 	// Check that the tempImage was created along with the other images
@@ -58,7 +58,7 @@ test('node script generates tempImage with --debug flag', t => {
 });
 
 test('node script generates tempImage with -d flag', t => {
-// Run the script in a subprocess with the -d flag
+	// Run the script in a subprocess with the -d flag
 	execFileSync('node', ['src/node/index.js', '-d']);
 
 	// Check that the tempImage was created along with the other images
