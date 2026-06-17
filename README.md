@@ -115,19 +115,7 @@ npm run lint:fix    # Auto-fix lint issues
 
 ## Architecture
 
-```
-src/
-├── lib/index.js       # Shared core logic (generateImage, chooseBestFontSize, addUrl)
-├── browser/index.js   # Browser entry-point — DOM event wiring, canvas creation
-└── node/index.js      # Node.js CLI — file I/O, uses `canvas` npm package
-
-test/
-├── lib.test.js        # Unit tests for core library
-├── browser.test.js    # Integration tests using jsdom
-└── node.test.js       # Integration tests for Node.js output files
-
-scripts/
-└── build.js           # ESBuild wrapper
+```text
 
 index.html             # Frontend UI
 dist/                  # Build output (generated — do not commit)

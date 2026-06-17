@@ -53,5 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- exposes createImages for the HTML onchange handler
 	globalThis.createImages = createImages;
 });

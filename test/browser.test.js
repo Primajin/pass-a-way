@@ -5,7 +5,9 @@ import {JSDOM} from 'jsdom';
 
 test.beforeEach(async () => {
 	const dom = new JSDOM('<!DOCTYPE html><html><body><div id="browser"><div class="wrapper"></div><input value="test"></div></body></html>');
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- jsdom test environment requires patching globalThis
 	globalThis.document = dom.window.document;
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- jsdom test environment requires patching globalThis
 	globalThis.window = dom.window;
 
 	// Dynamically import the browser script AFTER the DOM environment is set up.

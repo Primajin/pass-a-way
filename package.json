@@ -67,7 +67,8 @@
             "index"
           ]
         }
-      ]
+      ],
+      "jsdoc/reject-function-type": "off"
     }
   }
 }

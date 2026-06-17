@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint max-depth: ["error", 5] */
+/* eslint max-depth: ["error", 5] -- Pixel iteration in generateImage requires 5 levels of nesting */
 import fs from 'node:fs';
 import process from 'node:process';
 import {randomInt} from 'node:crypto';
@@ -24,8 +24,8 @@ let imageCount = 2;
 let debug = false;
 let showUrl = true;
 
-for (let i = 0; i < args.length; i++) {
-	switch (args[i]) {
+const processArg = (arg, nextArg) => {
+	switch (arg) {
 		case '-h':
 		case '--help': {
 			printHelp();
@@ -47,22 +47,29 @@ for (let i = 0; i < args.length; i++) {
 
 		case '-n':
 		case '--number': {
-			const value = Number(args[i + 1]);
-			if (!Number.isInteger(value) || value < 2) {
+			const value = Number(nextArg);
+			if (!Number.isSafeInteger(value) || value < 2) {
 				console.error('Error: --number requires an integer value of at least 2');
 				process.exit(1);
 			}
 
 			imageCount = value;
-			i++;
-			break;
+			return true;
 		}
 
 		default: {
-			console.error(`Unknown option: ${args[i]}`);
+			console.error(`Unknown option: ${arg}`);
 			printHelp();
 			process.exit(1);
 		}
+	}
+
+	return false;
+};
+
+for (let i = 0; i < args.length; i++) {
+	if (processArg(args[i], args[i + 1])) {
+		i++;
 	}
 }
 
@@ -72,7 +79,11 @@ const {images, middlePoint, temporaryImage} = generateImage(createCanvas, random
 // Clean up
 const path = './dist/';
 const regex = /\.png$/v;
-fs.readdirSync(path).filter(f => regex.test(f)).map(f => fs.unlinkSync(path + f));
+for (const f of fs.readdirSync(path)) {
+	if (regex.test(f)) {
+		fs.unlinkSync(path + f);
+	}
+}
 
 // Save temp image only in debug mode
 if (debug) {

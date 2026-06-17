@@ -1,8 +1,8 @@
-/* eslint max-depth: ["error", 5] */
+/* eslint max-depth: ["error", 5] -- Pixel iteration requires 5 levels of nesting */
 /**
  Measures the text length and chooses the best font size.
  @param {string} text - The text to measure.
- @param canvasContext - The canvas context to use.
+ @param {CanvasRenderingContext2D} canvasContext - The canvas context to use.
  */
 export const chooseBestFontSize = (text, canvasContext) => {
 	let fontSize = 70;
@@ -16,11 +16,11 @@ export const chooseBestFontSize = (text, canvasContext) => {
 
 /**
  Generates images based on the given text and randomizes the pixels between them.
- @param {function} createCanvas - A function that creates a canvas element.
- @param {function} randomInt - A function that generates a random integer.
+ @param {Function} createCanvas - A function that creates a canvas element.
+ @param {Function} randomInt - A function that generates a random integer.
  @param {string} text - The text to be used in the image.
  @param {number} [imageCount=2] - How many images to generate (minimum 2).
- @returns {{images: canvas[], middlePoint: [number, number], temporaryImage: canvas}}
+ @returns {{images: Array, middlePoint: Array, temporaryImage: object}} The generated images, middle point, and temporary image.
  */
 export const generateImage = (createCanvas, randomInt, text, imageCount = 2) => {
 	const IMAGE_SIZE = [800, 300]; // Image size
@@ -86,8 +86,8 @@ export default generateImage;
 
 /**
  Adds a text with the passaway URL to the bottom of the image.
- @param imageContext
- @param {Array} middlePoint
+ @param {CanvasRenderingContext2D} imageContext - The canvas context to draw on.
+ @param {Array} middlePoint - The [x, y] coordinates of the image centre.
  */
 export const addUrl = (imageContext, middlePoint) => {
 	imageContext.fillStyle = '#000';

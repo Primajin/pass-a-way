@@ -7,11 +7,13 @@ const distPath = './dist/';
 
 // Helper function to clear the dist directory
 const clearDist = () => {
-	if (fs.existsSync(distPath)) {
-		const files = fs.readdirSync(distPath);
-		for (const file of files) {
-			fs.unlinkSync(path.join(distPath, file));
-		}
+	if (!fs.existsSync(distPath)) {
+		return;
+	}
+
+	const files = fs.readdirSync(distPath);
+	for (const file of files) {
+		fs.unlinkSync(path.join(distPath, file));
 	}
 };
 
