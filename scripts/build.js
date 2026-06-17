@@ -5,9 +5,9 @@ const parameters = process.argv.slice(2); // eslint-disable-line n/prefer-global
 let watchmode = false;
 
 /**
- * Iterate through the parameters and set the build parameters
- * @param {Array} parameters
- * @returns {Object}
+ Iterate through the parameters and set the build parameters
+ @param {Array} parameters
+ @returns {object}
  */
 const getBuildParameters = parameters => {
 	const buildParameters = {

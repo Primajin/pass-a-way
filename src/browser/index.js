@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const createImages = () => {
-		while (browserElement.firstChild) {
-			browserElement.firstChild.remove();
-		}
+		browserElement.replaceChildren();
 
 		const text = inputElement.value;
 		if (text && text.length <= 45) {
