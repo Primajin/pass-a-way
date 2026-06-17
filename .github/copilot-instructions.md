@@ -6,7 +6,7 @@
 
 ## Architecture
 
-```
+```text
 src/
 ├── lib/index.js       # Shared core logic (generateImage, chooseBestFontSize, addUrl)
 ├── browser/index.js   # Browser entry-point — DOM event wiring, canvas creation

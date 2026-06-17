@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const createImages = () => {
-		while (browserElement.firstChild) {
-			browserElement.firstChild.remove();
-		}
+		browserElement.replaceChildren();
 
 		const text = inputElement.value;
 		if (text && text.length <= 45) {
@@ -55,5 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- exposes createImages for the HTML onchange handler
 	globalThis.createImages = createImages;
 });

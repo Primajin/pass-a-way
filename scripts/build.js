@@ -1,13 +1,13 @@
 import * as esbuild from 'esbuild';
 
-const parameters = process.argv.slice(2); // eslint-disable-line n/prefer-global/process
+const args = process.argv.slice(2); // eslint-disable-line n/prefer-global/process
 
 let watchmode = false;
 
 /**
- * Iterate through the parameters and set the build parameters
- * @param {Array} parameters
- * @returns {Object}
+ Iterate through the parameters and set the build parameters.
+ @param {Array} parameters - CLI arguments to parse into build options.
+ @returns {object} The resolved esbuild build parameters.
  */
 const getBuildParameters = parameters => {
 	const buildParameters = {
@@ -34,7 +34,7 @@ const getBuildParameters = parameters => {
 	return buildParameters;
 };
 
-const context = await esbuild.context({...getBuildParameters(parameters)});
+const context = await esbuild.context({...getBuildParameters(args)});
 
 if (watchmode) {
 	try {
