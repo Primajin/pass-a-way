@@ -21,8 +21,8 @@ Options:
 
 const args = process.argv.slice(2);
 let imageCount = 2;
-let debug = false;
-let showUrl = true;
+let isDebug = false;
+let isShowUrl = true;
 
 const processArg = (arg, nextArg) => {
 	switch (arg) {
@@ -35,13 +35,13 @@ const processArg = (arg, nextArg) => {
 
 		case '-d':
 		case '--debug': {
-			debug = true;
+			isDebug = true;
 			break;
 		}
 
 		case '-u':
 		case '--no-url': {
-			showUrl = false;
+			isShowUrl = false;
 			break;
 		}
 
@@ -86,14 +86,14 @@ for (const f of fs.readdirSync(path)) {
 }
 
 // Save temp image only in debug mode
-if (debug) {
+if (isDebug) {
 	fs.writeFileSync(path + 'tempImage.png', temporaryImage.toBuffer());
 }
 
 // Save images
 for (const [i, image] of images.entries()) {
 	const imageContext = image.getContext('2d');
-	if (showUrl) {
+	if (isShowUrl) {
 		addUrl(imageContext, middlePoint);
 	}
 
