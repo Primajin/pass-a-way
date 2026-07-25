@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --only=dev
       - name: Run linter
-        uses: wearerequired/lint-action@v2
+        uses: wearerequired/lint-action@v3
         with:
           auto_fix: true
           xo: true
