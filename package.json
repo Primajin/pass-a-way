@@ -2,7 +2,6 @@
   "name": "pass-a-way",
   "version": "0.0.1",
   "description": "A way to pass away a password before you pass away.",
-  "private": true,
   "type": "module",
   "engines": {
     "node": "^24"
