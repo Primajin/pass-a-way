@@ -46,6 +46,12 @@ Output images are written to `dist/`:
 
 ## Installation
 
+### npm
+
+```bash
+npm install pass-a-way
+```
+
 ### Prerequisites — native dependencies for `canvas`
 
 The `canvas` package is a native Node.js addon. Install the required system libraries **before** running `npm ci`.
