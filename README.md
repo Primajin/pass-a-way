@@ -1,5 +1,7 @@
 # Pass·a·way
 
+[![npm version](https://img.shields.io/npm/v/@primajin/pass-a-way.svg)](https://www.npmjs.com/package/@primajin/pass-a-way)
+
 > A way to pass away a password before you pass away.
 
 **Pass-a-way** is a steganographic password-preservation tool. It encodes a secret text into two visual images by distributing each pixel randomly between them. Neither image alone reveals the secret — overlaying both reconstructs the original text.
