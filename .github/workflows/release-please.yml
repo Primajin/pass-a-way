@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,6 +14,7 @@ permissions:
 
 jobs:
   release-please:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -24,8 +26,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-npm:
-    needs: release-please
-    if: needs.release-please.outputs.release_created == 'true'
+    needs: [release-please]
+    if: |
+      always() && (
+        (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+        needs.release-please.outputs.release_created == 'true'
+      )
     runs-on: ubuntu-latest
     environment: npm
     permissions:
