@@ -1,0 +1,48 @@
+import test from 'ava';
+import {JSDOM} from 'jsdom';
+
+// Note: '../src/browser/index.js' is NOT imported at the top level.
+
+test.beforeEach(async () => {
+	const dom = new JSDOM('<!DOCTYPE html><html><body><div id="browser"><div class="wrapper"></div><input value="test"></div></body></html>');
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- jsdom test environment requires patching globalThis
+	globalThis.document = dom.window.document;
+	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- jsdom test environment requires patching globalThis
+	globalThis.window = dom.window;
+
+	// Dynamically import the browser script AFTER the DOM environment is set up.
+	await import('../src/browser/index.js');
+
+	// The script adds an event listener for DOMContentLoaded. We need to trigger it.
+	const event = new dom.window.Event('DOMContentLoaded');
+	dom.window.document.dispatchEvent(event);
+});
+
+test.afterEach(() => {
+	// Clean up globals to avoid polluting other tests
+	delete globalThis.window;
+	delete globalThis.document;
+	delete globalThis.createImages;
+});
+
+test('createImages is defined', t => {
+	t.truthy(globalThis.createImages);
+});
+
+test('createImages creates images without temporaryImage', t => {
+	globalThis.createImages();
+	const images = globalThis.document.querySelectorAll('canvas');
+	// 2 images + 2 clones = 4 (temporaryImage is not rendered by default)
+	t.is(images.length, 4);
+});
+
+test('createImages clears previous images on re-render', t => {
+	globalThis.createImages();
+	t.is(globalThis.document.querySelectorAll('canvas').length, 4);
+
+	// Call again to trigger the while loop that removes existing children
+	globalThis.createImages();
+	const images = globalThis.document.querySelectorAll('canvas');
+	// Should still be 4, not 8 — old ones were removed
+	t.is(images.length, 4);
+});
