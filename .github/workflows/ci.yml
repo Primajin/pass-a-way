@@ -1,22 +1,25 @@
-name: "Build"
+name: CI
 
 on:
   push:
-  fork:
-  pull_request:
     branches: [ main ]
+  pull_request:
+    types: [ opened, reopened, synchronize, closed ]
 
-permissions:
-  contents: write
-  pull-requests: write
+# Least privilege by default; each job widens as needed.
+permissions: {}
 
 jobs:
   build:
+    if: github.event_name == 'push' || github.event.action != 'closed'
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     name: Make sure it builds.
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -270,3 +273,78 @@ jobs:
                 body,
               });
             }
+
+  lint:
+    if: github.event_name == 'push' || github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    name: Make sure the code adheres to the XO coding standard.
+    permissions: write-all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --only=dev
+      - name: Run linter
+        uses: wearerequired/lint-action@v3
+        with:
+          auto_fix: true
+          xo: true
+          args: --ignore=package-lock.json
+          commit_message: ":sparkles: Fix code style issues with ${linter}"
+
+  test:
+    if: github.event_name == 'push' || github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    name: Make sure the the unit tests pass.
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        run: npm ci --only=dev
+      - name: Run coverage
+        run: npm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  all-green:
+    name: All checks green
+    if: always()
+    needs:
+      - build
+      - lint
+      - test
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Fail if any required job failed or was cancelled
+        shell: bash
+        run: |
+          results="${{ join(needs.*.result, ' ') }}"
+          echo "Job results: $results"
+          for r in $results; do
+            if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
+              echo "::error::A required job did not pass (result=$r)."
+              exit 1
+            fi
+          done
+          echo "All jobs succeeded or were skipped."
