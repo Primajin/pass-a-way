@@ -21,7 +21,7 @@ const getBuildParameters = parameters => {
 
 	// Iterate through the parameters and overwrite the default options
 	for (const parameter of parameters) {
-		const [key, value] = parameter.split('=');
+		const [key, value] = parameter.split('=', 2);
 		buildParameters[key.replace('--', '')] = value ?? true;
 	}
 
