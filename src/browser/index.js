@@ -26,30 +26,32 @@ document.addEventListener('DOMContentLoaded', () => {
 		browserElement.replaceChildren();
 
 		const text = inputElement.value;
-		if (text && text.length <= 45) {
-			const {images, middlePoint} = generateImage(createCanvas, randomInt, text);
+		if (!text || text.length > 45) {
+			return;
+		}
 
-			for (const image of images) {
-				const imageContext = image.getContext('2d');
-				addUrl(imageContext, middlePoint);
-				browserElement.append(image);
-			}
+		const {images, middlePoint} = generateImage(createCanvas, randomInt, text);
 
-			const cloneCanvas = oldCanvas => {
-				const newCanvas = document.createElement('canvas');
-				const context = newCanvas.getContext('2d');
-				newCanvas.width = oldCanvas.width;
-				newCanvas.height = oldCanvas.height;
-				context.drawImage(oldCanvas, 0, 0);
-				return newCanvas;
-			};
+		for (const image of images) {
+			const imageContext = image.getContext('2d');
+			addUrl(imageContext, middlePoint);
+			browserElement.append(image);
+		}
 
-			const elementDiv = document.createElement('div');
-			elementDiv.classList.add('holder', 'browser');
-			browserElement.append(elementDiv);
-			for (const image of images) {
-				document.querySelector('.browser').append(cloneCanvas(image));
-			}
+		const cloneCanvas = oldCanvas => {
+			const newCanvas = document.createElement('canvas');
+			const context = newCanvas.getContext('2d');
+			newCanvas.width = oldCanvas.width;
+			newCanvas.height = oldCanvas.height;
+			context.drawImage(oldCanvas, 0, 0);
+			return newCanvas;
+		};
+
+		const elementDiv = document.createElement('div');
+		elementDiv.classList.add('holder', 'browser');
+		browserElement.append(elementDiv);
+		for (const image of images) {
+			document.querySelector('.browser').append(cloneCanvas(image));
 		}
 	};
 
