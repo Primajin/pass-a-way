@@ -24,6 +24,8 @@ const xoConfig = [
 		files: ['package.json'],
 		rules: {
 			'package-json/prefer-files-field': 'off',
+			// The katex override only patches xo's markdown linting (dev tooling); it is intentionally not meant for consumers.
+			'package-json/no-overrides-in-published-package': 'off',
 			'package-json/require-entry-point': 'off',
 		},
 	},
