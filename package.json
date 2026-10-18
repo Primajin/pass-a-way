@@ -44,7 +44,7 @@
     "xo": "^5.0.1"
   },
   "overrides": {
-    "katex": "^0.18.2",
+    "katex": "^0.19.0",
     "js-yaml@^3": {
       "argparse": "^2.0.1"
     }
