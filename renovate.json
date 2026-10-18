@@ -1,4 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>Primajin/.github:release-please"]
+  "extends": [
+    "local>Primajin/.github:release-please"
+  ],
+  "packageRules": [
+    {
+      "description": "argparse appears only as an override that keeps sprintf-js out of the tree (js-yaml 3 needs the old API): do not bump it",
+      "matchPackageNames": [
+        "argparse"
+      ],
+      "enabled": false
+    }
+  ]
 }
