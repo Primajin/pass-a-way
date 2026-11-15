@@ -20,6 +20,25 @@ test.serial.beforeEach(async () => {
 	globalThis.document = dom.window.document;
 	// eslint-disable-next-line unicorn/no-global-object-property-assignment -- jsdom test environment requires patching globalThis
 	globalThis.window = dom.window;
+	dom.window.HTMLCanvasElement.prototype.getContext = function (contextType) {
+		if (contextType !== '2d') {
+			return null;
+		}
+
+		return {
+			canvas: this,
+			font: '',
+			textAlign: '',
+			textBaseline: '',
+			fillStyle: '',
+			measureText: () => ({width: 500}),
+			fillText: () => undefined,
+			getImageData: () => ({data: [0, 0, 0, 0]}),
+			fillRect: () => undefined,
+			clearRect: () => undefined,
+			drawImage: () => undefined,
+		};
+	};
 
 	// Dynamically import the browser script AFTER the DOM environment is set up. The
 	// cache-busting query string forces Node to re-evaluate the module for every test, so
@@ -33,6 +52,7 @@ test.serial.beforeEach(async () => {
 
 test.serial.afterEach(() => {
 	// Clean up globals to avoid polluting other tests
+	globalThis.window.close();
 	delete globalThis.window;
 	delete globalThis.document;
 	delete globalThis.createImages;
